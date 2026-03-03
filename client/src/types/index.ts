@@ -44,7 +44,7 @@ export interface ProfileFormData {
 }
 
 // Food
-export interface FormData {
+export interface FoodFormData {
     name: string;
     calories: number;
     mealType: string;
