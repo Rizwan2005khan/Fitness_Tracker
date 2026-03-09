@@ -5,9 +5,9 @@ import { useAppContext } from "../context/AppContext"
 import type { ProfileFormData, UserData } from "../types"
 import Input from "../components/ui/Input"
 import Button from "../components/ui/Button"
-import mockApi from "../assets/mockApi"
 import { ageRanges, goalOptions } from "../assets/assets"
 import Slider from "../components/ui/Slider"
+import api from "../configs/api"
 
 const Onboarding = () => {
 
@@ -45,10 +45,15 @@ const Onboarding = () => {
         createdAt: new Date().toISOString()
       };
       localStorage.setItem('fitnessUser', JSON.stringify(userData))
-      await mockApi.user.update(user?.id || "", userData as unknown as Partial<UserData>)
-      toast.success('Profile updated successfully')
-      setOnboardingCompleted(true)
-      fetchUser(user?.token || "")
+      
+      try {
+        await api.put(`/api/users/${user?.id}`, userData)
+        toast.success('Profile updated successfully')
+        setOnboardingCompleted(true)
+        fetchUser(user?.token || "")
+      } catch (error: any) {
+        toast.error(error.message)
+      }
     }
   }
   return (
