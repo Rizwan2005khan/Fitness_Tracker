@@ -1,7 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {type FoodEntry, initialState, type ActivityEntry, type Credentials, type User } from "../types";
 import { useNavigate } from "react-router-dom";
-import mockApi from "../assets/mockApi";
 import api from "../configs/api";
 import toast from "react-hot-toast";
 
@@ -77,7 +76,7 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
 
     const fetchActivityLogs = async (token: string) => {
         try {
-          const { data } = await api.get('api/activity-logs', {headers: {
+          const { data } = await api.get('api/activity-l-logs', {headers: {
             Authorization: `Bearer ${token}` }})
             setAllActivityLogs(data)
         } catch (error: any) {
