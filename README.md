@@ -11,7 +11,7 @@ FitTrack is a state-of-the-art, professional fitness tracking application built 
 
 ## 📸 Dashboard Preview
 
-![FitTrack Dashboard](./screenshot.jpg)
+![FitTrack Dashboard](./screenshot.png)
 
 *Redesigned for a premium, glassmorphic user experience.*
 
