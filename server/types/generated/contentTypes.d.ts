@@ -477,9 +477,11 @@ export interface ApiFoodLogFoodLog extends Struct.CollectionTypeSchema {
   };
   attributes: {
     calories: Schema.Attribute.Integer;
+    carbs: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    fats: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -488,6 +490,39 @@ export interface ApiFoodLogFoodLog extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     mealType: Schema.Attribute.String;
     name: Schema.Attribute.String;
+    protein: Schema.Attribute.Integer & Schema.Attribute.DefaultTo<0>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    users_permissions_user: Schema.Attribute.Relation<
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiWaterLogWaterLog extends Struct.CollectionTypeSchema {
+  collectionName: 'water_logs';
+  info: {
+    displayName: 'WaterLog';
+    pluralName: 'water-logs';
+    singularName: 'water-log';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    amount: Schema.Attribute.Integer & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::water-log.water-log'
+    > &
+      Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -1005,6 +1040,10 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 3;
       }>;
+    water_logs: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::water-log.water-log'
+    >;
     weight: Schema.Attribute.Decimal;
   };
 }
@@ -1022,6 +1061,7 @@ declare module '@strapi/strapi' {
       'admin::user': AdminUser;
       'api::activity-l-log.activity-l-log': ApiActivityLLogActivityLLog;
       'api::food-log.food-log': ApiFoodLogFoodLog;
+      'api::water-log.water-log': ApiWaterLogWaterLog;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

@@ -20,6 +20,18 @@
     "calories": {
       "type": "integer"
     },
+    "protein": {
+      "type": "integer",
+      "default": 0
+    },
+    "carbs": {
+      "type": "integer",
+      "default": 0
+    },
+    "fats": {
+      "type": "integer",
+      "default": 0
+    },
     "users_permissions_user": {
       "type": "relation",
       "relation": "manyToOne",

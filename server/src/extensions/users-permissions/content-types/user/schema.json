@@ -95,6 +95,12 @@
       "relation": "oneToMany",
       "target": "api::activity-l-log.activity-l-log",
       "mappedBy": "users_permissions_user"
+    },
+    "water_logs": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::water-log.water-log",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

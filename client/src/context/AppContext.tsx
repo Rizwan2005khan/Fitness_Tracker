@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import {type FoodEntry, initialState, type ActivityEntry, type Credentials, type User } from "../types";
+import {type FoodEntry, initialState, type ActivityEntry, type Credentials, type User, type WaterEntry } from "../types";
 import { useNavigate } from "react-router-dom";
 import api from "../configs/api";
 import toast from "react-hot-toast";
@@ -15,6 +15,8 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
     const [onboardingCompleted, setOnboardingCompleted] = useState(false)
     const [allFoodLogs, setAllFoodLogs] = useState<FoodEntry[]>([])
     const [allActivityLogs, setAllActivityLogs] = useState<ActivityEntry[]>([])
+    const [allWaterLogs, setAllWaterLogs] = useState<WaterEntry[]>([])
+    const [streak, setStreak] = useState(0)
 
     const signup = async (credentials: Credentials) => {
         try {
@@ -85,6 +87,60 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
         }
     }
 
+    const fetchWaterLogs = async (token: string) => {
+        try {
+          const { data } = await api.get('api/water-logs', {headers: {
+            Authorization: `Bearer ${token}` }})
+            setAllWaterLogs(data)
+        } catch (error: any) {
+          console.log(error)
+          toast.error(error?.response?.data?.error?.message || error?.message)
+        }
+    }
+
+    const calculateStreak = () => {
+        const logs = [...allActivityLogs, ...allFoodLogs, ...allWaterLogs];
+        if (logs.length === 0) return setStreak(0);
+
+        const dates = [...new Set(logs.map(log => log.createdAt?.split('T')[0]))].sort().reverse();
+        
+        let currentStreak = 0;
+        const today = new Date().toISOString().split('T')[0];
+        const checkDate = new Date();
+
+        if (dates[0] === today) {
+            currentStreak = 1;
+            checkDate.setDate(checkDate.getDate() - 1);
+            
+            for (let i = 1; i < dates.length; i++) {
+                const dateStr = checkDate.toISOString().split('T')[0];
+                if (dates.includes(dateStr)) {
+                    currentStreak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+        } else {
+            checkDate.setDate(checkDate.getDate() - 1);
+            const yesterdayStr = checkDate.toISOString().split('T')[0];
+            
+            if (dates.includes(yesterdayStr)) {
+                for (let i = 0; i < dates.length; i++) {
+                    const dateStr = checkDate.toISOString().split('T')[0];
+                    if (dates.includes(dateStr)) {
+                        currentStreak++;
+                        checkDate.setDate(checkDate.getDate() - 1);
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        setStreak(currentStreak);
+    };
+
     const logout = () => {
         localStorage.removeItem('token')
         setUser(null)
@@ -100,12 +156,17 @@ export const AppProvider = ({children}: {children: React.ReactNode}) => {
           await fetchUser(token)
           await fetchFoodLogs(token)
           await fetchActivityLogs(token)
+          await fetchWaterLogs(token)
         })()
       }
     }, [])
 
+    useEffect(() => {
+        calculateStreak();
+    }, [allActivityLogs, allFoodLogs, allWaterLogs]);
+
     const value = {
-        user, setUser, isUserFetched, fetchUser, signup, login, logout, onboardingCompleted, setOnboardingCompleted, allFoodLogs, allActivityLogs,setAllFoodLogs, setAllActivityLogs
+        user, setUser, isUserFetched, fetchUser, signup, login, logout, onboardingCompleted, setOnboardingCompleted, allFoodLogs, allActivityLogs, allWaterLogs, streak, setAllFoodLogs, setAllActivityLogs, setAllWaterLogs
     }
 
     return <AppContext.Provider value={value}>

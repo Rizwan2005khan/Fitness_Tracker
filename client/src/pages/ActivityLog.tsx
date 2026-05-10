@@ -14,6 +14,7 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import toast from "react-hot-toast";
 import mockApi from "../assets/mockApi";
+import AIWorkoutAssistant from "../components/AIWorkoutAssistant";
 
 const ActivityLog = () => {
   const { allActivityLogs, setAllActivityLogs } = useAppContext();
@@ -152,6 +153,7 @@ const ActivityLog = () => {
       </div>
 
       <div className="page-content-grid">
+        <AIWorkoutAssistant />
         {/* Quick Add */}
         {!showForm && (
           <div className="space-y-4">

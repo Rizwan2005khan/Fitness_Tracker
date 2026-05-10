@@ -16,7 +16,7 @@ export const analyzeImage = async (filePath: string) => {
           data: base64ImageFile,
         },
       },
-      { text: "Extract the food name and estimated calories from this image in a JSON object." },
+      { text: "Extract the food name, estimated calories, protein (g), carbs (g), and fats (g) from this image in a JSON object." },
     ];
     
     const config = {
@@ -26,6 +26,9 @@ export const analyzeImage = async (filePath: string) => {
             properties: {
                 name: {type: "string"},
                 calories: { type: "number"},
+                protein: { type: "number"},
+                carbs: { type: "number"},
+                fats: { type: "number"},
             }
         }
     }

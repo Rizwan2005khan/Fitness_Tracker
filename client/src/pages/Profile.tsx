@@ -3,7 +3,7 @@ import { useAppContext } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { ProfileFormData, UserData } from "../types";
 import Card from "../components/ui/Card";
-import { Calendar, LogOutIcon, MoonIcon, Scale, SunIcon, User } from "lucide-react";
+import { Calendar, DumbbellIcon, FlameIcon, LogOutIcon, MoonIcon, Scale, SunIcon, User } from "lucide-react";
 import Button from "../components/ui/Button";
 import { goalLabels, goalOptions } from "../assets/assets";
 import Input from "../components/ui/Input";
@@ -12,7 +12,7 @@ import mockApi from "../assets/mockApi";
 import toast from "react-hot-toast";
 
 const Profile = () => {
-  const { user,fetchUser, logout, allActivityLogs, allFoodLogs } = useAppContext();
+  const { user,fetchUser, logout, allActivityLogs, allFoodLogs, streak } = useAppContext();
   const { theme, toggleTheme } = useTheme();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -199,6 +199,24 @@ const Profile = () => {
             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{stats.totalActivities}</p>
             <p className="text-sm text-slate-500 dark:text-slate-400">Activities</p>
             </div>
+            </div>
+          </Card>
+
+          <Card>
+            <h3 className="font-semibold text-slate-800 dark:text-white mb-4">Achievements</h3>
+            <div className="grid grid-cols-3 gap-3">
+              <div className={`flex flex-col items-center p-3 rounded-xl border ${streak >= 1 ? 'bg-orange-50 border-orange-200 dark:bg-orange-900/10 dark:border-orange-800' : 'bg-slate-50 border-slate-200 dark:bg-slate-800 opacity-50 grayscale'}`}>
+                <FlameIcon className={`size-6 ${streak >= 1 ? 'text-orange-500' : 'text-slate-400'}`} />
+                <span className="text-[10px] font-bold text-slate-500 mt-2 text-center uppercase">First Log</span>
+              </div>
+              <div className={`flex flex-col items-center p-3 rounded-xl border ${streak >= 7 ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/10 dark:border-blue-800' : 'bg-slate-50 border-slate-200 dark:bg-slate-800 opacity-50 grayscale'}`}>
+                <Calendar className={`size-6 ${streak >= 7 ? 'text-blue-500' : 'text-slate-400'}`} />
+                <span className="text-[10px] font-bold text-slate-500 mt-2 text-center uppercase">7 Day Pro</span>
+              </div>
+              <div className={`flex flex-col items-center p-3 rounded-xl border ${stats.totalActivities >= 10 ? 'bg-purple-50 border-purple-200 dark:bg-purple-900/10 dark:border-purple-800' : 'bg-slate-50 border-slate-200 dark:bg-slate-800 opacity-50 grayscale'}`}>
+                <DumbbellIcon className={`size-6 ${stats.totalActivities >= 10 ? 'text-purple-500' : 'text-slate-400'}`} />
+                <span className="text-[10px] font-bold text-slate-500 mt-2 text-center uppercase">Workout Hero</span>
+              </div>
             </div>
           </Card>
 

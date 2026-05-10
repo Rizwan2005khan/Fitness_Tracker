@@ -19,7 +19,10 @@ const FoodLog = () => {
   const [formData, setFormData] = useState<FoodFormData>({
     name: '',
     calories: 0,
-    mealType: ''
+    mealType: '',
+    protein: 0,
+    carbs: 0,
+    fats: 0
   })
    const [loading, setLoading] = useState(false)
    const inputRef = useRef<HTMLInputElement>(null)
@@ -41,7 +44,7 @@ const FoodLog = () => {
     try {
       const {data} = await api.post('/api/food-logs',{data: formData})
       setAllFoodLogs(prev => [...prev, data])
-      setFormData({name: '', calories: 0, mealType: ''})
+      setFormData({name: '', calories: 0, mealType: '', protein: 0, carbs: 0, fats: 0})
       setShowForm(false)
     } catch (error:any) {
       console.log(error)
@@ -192,6 +195,12 @@ const FoodLog = () => {
               <Input label="Calories" type="number" value={formData.calories} onChange={(v) => setFormData({...formData, calories: Number(v)})}
               placeholder="e.g., 350" required min={1} />
 
+               <div className="grid grid-cols-3 gap-3">
+                 <Input label="Protein (g)" type="number" value={formData.protein} onChange={(v) => setFormData({...formData, protein: Number(v)})} placeholder="0" min={0} />
+                 <Input label="Carbs (g)" type="number" value={formData.carbs} onChange={(v) => setFormData({...formData, carbs: Number(v)})} placeholder="0" min={0} />
+                 <Input label="Fats (g)" type="number" value={formData.fats} onChange={(v) => setFormData({...formData, fats: Number(v)})} placeholder="0" min={0} />
+               </div>
+
                <Select label="Meal Type" value={formData.mealType} onChange={(v) => setFormData({...formData, mealType: v.toString()})} options={mealTypeOptions} placeholder="Select meal type" required />
 
             
@@ -199,7 +208,10 @@ const FoodLog = () => {
                 <Button className="flex-1" type="button" variant="secondary" onClick={() => {setShowForm(false); setFormData({
                   name: '',
                   calories: 0,
-                  mealType: ''
+                  mealType: '',
+                  protein: 0,
+                  carbs: 0,
+                  fats: 0
                 })}}>
                   Cancel
                 </Button>

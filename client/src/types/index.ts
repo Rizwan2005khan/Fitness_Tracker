@@ -48,6 +48,9 @@ export interface FoodFormData {
     name: string;
     calories: number;
     mealType: string;
+    protein?: number;
+    carbs?: number;
+    fats?: number;
 }
 
 // Food Entry
@@ -55,6 +58,9 @@ export interface FoodEntry {
     id: number | string;
     name: string;
     calories: number;
+    protein: number;
+    carbs: number;
+    fats: number;
     mealType: "breakfast" | "lunch" | "dinner" | "snack";
     date: string;
     createdAt?: string;
@@ -72,6 +78,14 @@ export interface ActivityEntry {
     createdAt?: string;
 }
 
+// Water Entry
+export interface WaterEntry {
+    id: string | number;
+    amount: number;
+    createdAt: string;
+    documentId: string;
+}
+
 export type AppContextType = {
     user: User;
     setUser: React.Dispatch<React.SetStateAction<User>>;
@@ -86,6 +100,9 @@ export type AppContextType = {
     setAllFoodLogs: React.Dispatch<React.SetStateAction<FoodEntry[]>>;
     allActivityLogs: ActivityEntry[];
     setAllActivityLogs: React.Dispatch<React.SetStateAction<ActivityEntry[]>>;
+    allWaterLogs: WaterEntry[];
+    setAllWaterLogs: React.Dispatch<React.SetStateAction<WaterEntry[]>>;
+    streak: number;
 };
 
 export const initialState: AppContextType = {
@@ -102,4 +119,6 @@ export const initialState: AppContextType = {
     setAllFoodLogs: () => {},
     allActivityLogs: [],
     setAllActivityLogs: () => {},
+    allWaterLogs: [],
+    setAllWaterLogs: () => {},
 };
